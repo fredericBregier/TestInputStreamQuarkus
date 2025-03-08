@@ -1,55 +1,26 @@
 package org.example.client;
 
-import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.Uni;
-import org.example.model.TestModel;
-import org.jboss.resteasy.reactive.RestPath;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.io.InputStream;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/api")
+@RegisterRestClient
 public interface TestClientService {
-
   @Path("/test/{testId}")
-  @POST
-  @Consumes(MediaType.APPLICATION_JSON)
-  Uni<Response> create(@RestPath String testId, TestModel testModel);
-
-  @Path("/test/{testId}")
-  @DELETE
-  Uni<Response> delete(@RestPath String testId);
-
-  @Path("/test/{testId}")
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  Uni<TestModel> get(@RestPath String testId);
-
-  @Path("/test/{testId}/binary")
   @POST
   @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-  Uni<Response> createFromInputStream(@RestPath String testId, InputStream content);
+  Response createFromInputStream(@PathParam("testId") String testId, InputStream content);
 
-  @Path("/test/{testId}/binary")
+  @Path("/test/{testId}")
   @GET
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  Uni<InputStream> readFromInputStream(@RestPath String testId);
-
-  @Path("/test/{testId}/binarybyte")
-  @GET
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  Multi<byte[]> readFromInputStreamByte(@RestPath String testId);
-
-  @Path("/test/{testId}/hugebinary")
-  @GET
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  Uni<InputStream> readFromInputStreamHuge(@RestPath String testId);
-
+  InputStream readFromInputStream(@PathParam("testId") String testId);
 }

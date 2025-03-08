@@ -1,29 +1,28 @@
 package org.example.fake;
 
-import io.smallrye.common.constraint.NotNull;
+import static org.example.StaticValues.*;
 
+import io.smallrye.common.constraint.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import static org.example.StaticValues.*;
 
 public class FakeInputStream extends InputStream {
   private static final byte[] EMPTY = new byte[0];
   private long toSend;
 
+  public FakeInputStream(final long len) {
+    toSend = len;
+  }
+
   public static long consumeAll(final InputStream inputStream) throws IOException {
     long len = 0;
-    var read = 0;
+    int read = 0;
     final byte[] bytes = new byte[BUFFER_SIZE];
     while ((read = inputStream.read(bytes, 0, BUFFER_SIZE)) >= 0) {
       len += read;
     }
     return len;
-  }
-
-  public FakeInputStream(final long len) {
-    toSend = len;
   }
 
   @Override
@@ -58,7 +57,8 @@ public class FakeInputStream extends InputStream {
   }
 
   @Override
-  public int readNBytes(@NotNull final byte[] bytes, final int off, final int len) throws IOException {
+  public int readNBytes(@NotNull final byte[] bytes, final int off, final int len)
+      throws IOException {
     if (toSend <= 0) {
       return -1;
     }
@@ -69,7 +69,7 @@ public class FakeInputStream extends InputStream {
 
   @Override
   public int available() throws IOException {
-    return toSend >= Integer.MAX_VALUE? Integer.MAX_VALUE : (int) toSend;
+    return toSend >= Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) toSend;
   }
 
   @Override
@@ -118,7 +118,7 @@ public class FakeInputStream extends InputStream {
   public long transferTo(@NotNull final OutputStream out) throws IOException {
     final long readFinal = toSend;
     final byte[] bytes = new byte[16 * 1024];
-    var read = (int) skip(16 * 1024);
+    int read = (int) skip(16 * 1024);
     while (read > 0) {
       out.write(bytes, 0, read);
       read = (int) skip(16 * 1024);
