@@ -1,12 +1,12 @@
 package org.example.client.netty;
 
+import static org.example.StaticValues.*;
+
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
-
-import static org.example.StaticValues.*;
 
 public class HttpClientInitializer extends ChannelInitializer<SocketChannel> {
 
@@ -17,5 +17,4 @@ public class HttpClientInitializer extends ChannelInitializer<SocketChannel> {
     p.addLast(new ChunkedWriteHandler());
     p.addLast(new HttpClientHandler());
   }
-
 }
