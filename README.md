@@ -39,3 +39,9 @@ With 1MB (Change to be done in StaticValues class) 20 times
     - There is a huge difference in time between Quarkus and Netty on client side, which should not be
       - Difference is close to a factor of 10.
     - The memory is not affected
+
+To reproduce:
+- Change if necessary StaticValues size
+- In the unique test, Change if necessary the itération number 
+- Runs the test
+
